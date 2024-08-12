@@ -27,6 +27,15 @@ export default function App() {
   const [showModal, setShowModal] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [gender, setGender] = useState('M');
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+  window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -196,20 +205,22 @@ export default function App() {
       </button>
 
       {showModal && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '90%',
-          transform: 'translate(-50%, -50%)',
-          backgroundColor: 'white',
-          padding: '20px',
-          borderRadius: '8px',
-          boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-          zIndex: 1000,
-          animation: 'fadeIn 0.3s'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-            <h3 style={{ margin: '0', marginRight: '10px' }}>Add  Profile</h3>
+     <div style={{
+      position: 'fixed',
+      top: isMobile ? '80%' : '50%',
+      left: isMobile ? '50%' : '88%',
+      transform: isMobile ? 'translate(-50%, -50%)' : 'translate(-50%, -50%)',
+      backgroundColor: 'white',
+      padding: '20px',
+      borderRadius: '8px',
+      boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+      zIndex: 1000,
+      animation: 'fadeIn 0.3s',
+      width: isMobile ? '90%' : 'auto', // Adjust width based on screen size
+      maxWidth: isMobile ? '600px' : '400px' // Set a max-width for larger screens
+    }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+            <h3 style={{ margin: '0', marginRight: '18px' }}>Add  Profile</h3>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <label style={{ marginRight: '5px' }}>Gender:</label>
               <button
