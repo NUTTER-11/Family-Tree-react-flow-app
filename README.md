@@ -26,7 +26,7 @@ This React application uses `@xyflow/react` to create an interactive family tree
 
 3. Start the application:
    ```bash
-   npm start
+   npm run dev
    ```
 
 ## Usage
