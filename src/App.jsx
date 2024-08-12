@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
+import html2canvas from 'html2canvas';
 import {
   ReactFlow,
   MiniMap,
@@ -15,7 +16,7 @@ const initialNodes = [
   // { id: '2', position: { x: 0, y: 100 }, data: { label: 'Child 1', secondLabel: '', toggle: false, gender: 'F' }, style: { backgroundColor: '#fff' } },
 ];
 // const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
-const initialEdges=[]
+const initialEdges = [];
 
 export default function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -152,6 +153,15 @@ export default function App() {
     return { parentNodes: parents, childNodes: children };
   }, [selectedNode, edges, nodes]);
 
+  const handleExport = () => {
+    html2canvas(document.querySelector('.react-flow')).then(canvas => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = 'diagram.png';
+      link.click();
+    });
+  };
+
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       <ReactFlow
@@ -161,11 +171,29 @@ export default function App() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onNodeClick={handleNodeClick}
+        className="react-flow"
       >
         <Controls />
         <MiniMap />
         <Background variant="dots" gap={12} size={1} />
       </ReactFlow>
+
+      <button
+        onClick={handleExport}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          padding: '10px',
+          backgroundColor: '#007BFF',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+        }}
+      >
+        Export as Image
+      </button>
 
       {showModal && (
         <div style={{
@@ -232,10 +260,10 @@ export default function App() {
                 />
               </label>
             </div>
-           
+
             {toggle && (
               <div style={{ marginBottom: '8px' }}>
-                 <h4 style={{ margin: '0 0 1px' }}>Married with</h4>
+                <h4 style={{ margin: '0 0 1px' }}>Married with</h4>
                 <label>
                   Name:
                   <input
@@ -268,7 +296,7 @@ export default function App() {
               onMouseOver={(e) => e.target.style.backgroundColor = '#45a049'}
               onMouseOut={(e) => e.target.style.backgroundColor = '#4CAF50'}
             >
-            Update Name
+              Update Name
             </button>
             <button
               type="button"
@@ -310,24 +338,24 @@ export default function App() {
               </button>
             )}
             {toggle && (
-            <button
-              type="button"
-              onClick={handleAddNode}
-              style={{
-                marginTop: '5px',
-                padding: '8px 16px',
-                backgroundColor: '#007BFF',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                transition: 'background-color 0.3s',
-              }}
-              onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
-              onMouseOut={(e) => e.target.style.backgroundColor = '#007BFF'}
-            >
-              Add Children
-            </button>
+              <button
+                type="button"
+                onClick={handleAddNode}
+                style={{
+                  marginTop: '5px',
+                  padding: '8px 16px',
+                  backgroundColor: '#007BFF',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s',
+                }}
+                onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+                onMouseOut={(e) => e.target.style.backgroundColor = '#007BFF'}
+              >
+                Add Children
+              </button>
             )}
           </form>
           <h4>Parent</h4>
